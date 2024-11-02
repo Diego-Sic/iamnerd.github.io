@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>I am a nerd I guess</title>
+    <style>
+        body {
+            margin: 0;
+            background-color: skyblue;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        /* Butterfly that follows the cursor */
+        .butterfly {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100px;
+            height: 100px;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+        }
+
+        .butterfly svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .wing {
+            fill: purple;
+        }
+
+        #left-wing {
+            transform-origin: 100px 100px;
+            animation: flap-left 0.5s ease-in-out infinite alternate;
+        }
+
+        #right-wing {
+            transform-origin: 100px 100px;
+            animation: flap-right 0.5s ease-in-out infinite alternate;
+        }
+
+        .body {
+            fill: darkmagenta;
+        }
+
+        @keyframes flap-left {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(-15deg);
+            }
+        }
+
+        @keyframes flap-right {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(15deg);
+            }
+        }
+
+        /* Butterflies created on click */
+        .click-butterfly {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            pointer-events: none;
+        }
+
+        .click-butterfly svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0px) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-200px) scale(0.5);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Butterfly that follows the cursor -->
+    <div class="butterfly">
+        <svg viewBox="0 0 200 200">
+            <!-- Left Wing -->
+            <path id="left-wing" class="wing" d="M100,100 C50,50 20,80 20,150 C50,150 80,130 100,100 Z" />
+            <!-- Right Wing -->
+            <path id="right-wing" class="wing" d="M100,100 C150,50 180,80 180,150 C150,150 120,130 100,100 Z" />
+            <!-- Body -->
+            <rect class="body" x="95" y="100" width="10" height="60" />
+            <!-- Antennae -->
+            <line x1="100" y1="100" x2="90" y2="80" stroke="darkmagenta" stroke-width="2" />
+            <line x1="100" y1="100" x2="110" y2="80" stroke="darkmagenta" stroke-width="2" />
+        </svg>
+    </div>
+
+    <script>
+        // Butterfly follows the cursor
+        const butterfly = document.querySelector('.butterfly');
+        let butterflyX = window.innerWidth / 2;
+        let butterflyY = window.innerHeight / 2;
+
+        let mouseX = butterflyX;
+        let mouseY = butterflyY;
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+
+        function animateButterfly() {
+            // Easing movement
+            butterflyX += (mouseX - butterflyX) * 0.1;
+            butterflyY += (mouseY - butterflyY) * 0.1;
+
+            butterfly.style.left = butterflyX + 'px';
+            butterfly.style.top = butterflyY + 'px';
+
+            requestAnimationFrame(animateButterfly);
+        }
+
+        animateButterfly();
+
+        const redirectUrl = 'https://open.spotify.com/playlist/7pC5bMpCa7yETog2wPhKP2?si=fd9eed5f2dd7463b'; 
+
+        document.addEventListener('click', () => {
+            createClickButterflies();
+            setTimeout(() => {
+                window.location.href = redirectUrl;
+            }, 3000); // Redirect after 3 seconds
+        });
+
+        function createClickButterflies() {
+            const numButterflies = 20;
+
+            for (let i = 0; i < numButterflies; i++) {
+                const butterfly = document.createElement('div');
+                butterfly.classList.add('click-butterfly');
+                butterfly.style.left = Math.random() * window.innerWidth + 'px';
+                butterfly.style.top = (window.innerHeight - 50) + 'px'; // Start from bottom
+
+                butterfly.innerHTML = `
+                    <svg viewBox="0 0 200 200">
+                        <!-- Left Wing -->
+                        <path class="wing" d="M100,100 C50,50 20,80 20,150 C50,150 80,130 100,100 Z">
+                            <animateTransform attributeName="transform" attributeType="XML"
+                                type="rotate" from="0 100 100" to="-15 100 100"
+                                dur="0.5s" repeatCount="indefinite" additive="sum"/>
+                        </path>
+                        <!-- Right Wing -->
+                        <path class="wing" d="M100,100 C150,50 180,80 180,150 C150,150 120,130 100,100 Z">
+                            <animateTransform attributeName="transform" attributeType="XML"
+                                type="rotate" from="0 100 100" to="15 100 100"
+                                dur="0.5s" repeatCount="indefinite" additive="sum"/>
+                        </path>
+                        <!-- Body -->
+                        <rect class="body" x="95" y="100" width="10" height="60" />
+                        <!-- Antennae -->
+                        <line x1="100" y1="100" x2="90" y2="80" stroke="darkmagenta" stroke-width="2" />
+                        <line x1="100" y1="100" x2="110" y2="80" stroke="darkmagenta" stroke-width="2" />
+                    </svg>
+                `;
+
+                document.body.appendChild(butterfly);
+
+                // Animate the butterfly
+                butterfly.style.animation = `floatUp ${2 + Math.random()}s ease-in forwards`;
+
+                // Remove the butterfly after animation
+                setTimeout(() => {
+                    butterfly.remove();
+                }, 3000);
+            }
+        }
+    </script>
+</body>
+</html>
