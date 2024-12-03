@@ -117,6 +117,13 @@
             mouseY = e.clientY;
         });
 
+        // Handle touch move
+        document.addEventListener('touchmove', (e) => {
+            const touch = e.touches[0];
+            mouseX = touch.clientX;
+            mouseY = touch.clientY;
+        });
+
         function animateButterfly() {
             // Easing movement
             butterflyX += (mouseX - butterflyX) * 0.1;
@@ -130,7 +137,17 @@
 
         animateButterfly();
 
-        const redirectUrl = 'https://open.spotify.com/playlist/7pC5bMpCa7yETog2wPhKP2?si=fd9eed5f2dd7463b'; 
+        const redirectUrl = 'https://open.spotify.com/playlist/0dWWuSM9GvksX0YK16urgT?si=6fa80c103ade42e9&pt=2e7c09ec02bdbeda6d5f1a2f5d12fe56'; 
+
+        let lastTap = 0;
+        document.addEventListener('touchend', () => {
+            const now = new Date().getTime();
+            if (now - lastTap <= 300) {
+                // Double tap detected
+                window.location.href = redirectUrl;
+            }
+            lastTap = now;
+        });
 
         document.addEventListener('click', () => {
             createClickButterflies();
