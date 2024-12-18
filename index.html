@@ -10,6 +10,10 @@
             cursor: pointer;
         }
 
+        .title {
+            font-size: larger;
+            color: blueviolet;
+        }
         /* Butterfly that follows the cursor */
         .butterfly {
             position: absolute;
@@ -89,6 +93,7 @@
 </head>
 <body>
     <!-- Butterfly that follows the cursor -->
+     <div class="title">Para Nathy, cuz you are magic :D</div>
     <div class="butterfly">
         <svg viewBox="0 0 200 200">
             <!-- Left Wing -->
@@ -137,7 +142,7 @@
 
         animateButterfly();
 
-        const redirectUrl = 'https://open.spotify.com/playlist/0dWWuSM9GvksX0YK16urgT?si=6fa80c103ade42e9&pt=2e7c09ec02bdbeda6d5f1a2f5d12fe56'; 
+        const redirectUrl = 'https://www.youtube.com/watch?v=trCPhDHH1Cs';
 
         let lastTap = 0;
         document.addEventListener('touchend', () => {
